@@ -8,13 +8,7 @@ var sgTransport = require('nodemailer-sendgrid-transport');
 const User = require('../models/userModel')
 const Token = require('../models/tokenModel')
 
-const sendGridOptions = {
-	auth: {
-		api_user: process.env.SENDGRID_USERNAME,
-		api_key: process.env.SENDGRID_PASSWORD
-	}
-}
-const mailClient = nodemailer.createTransport(sgTransport(sendGridOptions))
+
 
 authRouter.route('/login')
 	.post((req, res) => {
@@ -58,6 +52,14 @@ authRouter.route('/sign-up')
 						subject: 'Account Verification Token',
 						text: 'Hello,\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/api/auth/confirmation\/' + token.token + '.\n'
 					}
+
+					const sendGridOptions = {
+						auth: {
+							api_user: "ruckingapp",
+							api_key: "P@SSW0rd1235"
+						}
+					}
+					const mailClient = nodemailer.createTransport(sgTransport(sendGridOptions))
 
 					mailClient.sendMail(mail, function (err, info) {
 						if (err) return res.status(500).send({ msg: err.message })

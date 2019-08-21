@@ -58,7 +58,8 @@ workoutRouter.route('/more')
                     creator: item.userId.userId,
                     createDate: item.createdAt.toDateString(),
                     id: item._id,
-                    setCount: item.setCount
+                    setCount: item.setCount,
+                    setList: item.setList
                 })
             })
             res.send({ workouts: workouts })
