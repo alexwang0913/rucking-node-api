@@ -18,6 +18,9 @@ const db = mongoose.connect(process.env.DB_ADDRESS);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+var uploadDir = require('path').join(__dirname, '/uploads');
+app.use(express.static(uploadDir));
+
 // API routes
 app.use('/api/users', userRouter);
 app.use('/api/auth', authRouter);

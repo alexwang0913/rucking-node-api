@@ -20,6 +20,7 @@
     "email-verification": "^0.4.6",
     "express": "^4.16.2",
     "mongoose": "^5.0.1",
+    "multer": "^1.4.2",
     "nodemailer-sendgrid-transport": "^0.2.0",
     "password-reset": "^0.1.4"
   },

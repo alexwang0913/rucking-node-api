@@ -8,7 +8,18 @@ var sgTransport = require('nodemailer-sendgrid-transport');
 const User = require('../models/userModel')
 const Token = require('../models/tokenModel')
 
+const multer = require('multer')
 
+const storage = multer.diskStorage({
+	destination: function (req, file, callback) {
+		callback(null, './uploads/avatar');
+	},
+	filename: function (req, file, callback) {
+		callback(null, file.fieldname + '-' + Date.now() + '.png');
+	}
+});
+
+var upload = multer({ storage: storage })
 
 authRouter.route('/login')
 	.post((req, res) => {
@@ -27,8 +38,9 @@ authRouter.route('/login')
 	})
 
 authRouter.route('/sign-up')
-	.post((req, res) => {
+	.post(upload.single('avatar'), (req, res) => {
 		const { firstName, lastName, userId, email, password } = req.body
+		const fileName = req.file.size > 0 ? req.file.filename : ""
 		User.findOne({ email: email }, (err, user) => {
 			if (user) return res.status(500).send({ msg: 'The email address you have entered is already associcated with another account.' })
 
@@ -37,7 +49,8 @@ authRouter.route('/sign-up')
 				lastName: lastName,
 				userId: userId,
 				email: email,
-				password: password
+				password: password,
+				profileUrl: fileName
 			})
 			user.save(err => {
 				if (err) return res.status(500).send({ msg: err.message })
